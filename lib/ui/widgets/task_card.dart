@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:task_management_app/utils/export.dart';
 
@@ -10,9 +12,9 @@ class TaskCard extends StatelessWidget {
   final Task task;
 
   const TaskCard({
-    Key? key,
+    super. key,
     required this.task,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -24,20 +26,24 @@ class TaskCard extends StatelessWidget {
 
     return Card(
       elevation: 4,
-      margin: EdgeInsets.all(8),
+      margin: const EdgeInsets.all(8),
       child: Padding(
-        padding: EdgeInsets.all(12),
+        padding: const EdgeInsets.all(12),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  task.title ?? "No title",
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
+                Flexible(
+                  child: Text(
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    task.title ?? "No title",
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
                 Text(
@@ -49,29 +55,35 @@ class TaskCard extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Text(
               task.description ?? "No description",
               maxLines: 3,
               overflow: TextOverflow.ellipsis,
-              style: TextStyle(fontSize: 16),
+              style: const TextStyle(fontSize: 16),
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Row(
               children: [
-                Text(
-                  'Created: ${DateFormat('dd MMM yyyy').format(task.createdAt ?? DateTime.now()) }',
-                  style: TextStyle(fontSize: 14, color: Colors.grey),
+                Flexible(
+                  child: Text(
+                    'Created: ${DateFormat('dd MMM yyyy').format(task.createdAt ?? DateTime.now()) }',
+                    style: const TextStyle(fontSize: 14, color: Colors.grey),
+                  ),
                 ),
-                SizedBox(width: 20),
-                Text(
-                  'Deadline: $days days $hours hours',
-                  style: TextStyle(fontSize: 14, color: Colors.grey),
+                const SizedBox(width: 20),
+                Flexible(
+                  child: Text(
+                    'Deadline: $days days $hours hours',
+                    style: const TextStyle(fontSize: 14, color: Colors.grey),
+                  ),
                 ),
-                SizedBox(width: 20),
-                Text(
-                  'Priority: ${task.priority.priorityToString()}',
-                  style: TextStyle(fontSize: 14, color: Colors.grey),
+                const SizedBox(width: 20),
+                Flexible(
+                  child: Text(
+                    'Priority: ${task.priority.priorityToString()}',
+                    style: const TextStyle(fontSize: 14, color: Colors.grey),
+                  ),
                 ),
               ],
             ),

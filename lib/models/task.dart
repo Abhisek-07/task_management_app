@@ -14,6 +14,7 @@ class Task {
   String? title;
   String? description;
   DateTime? createdAt;
+  DateTime? editedAt;
   DateTime? deadLine;
   Priority? priority;
   bool isCompleted;

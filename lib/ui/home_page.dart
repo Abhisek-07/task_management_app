@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:task_management_app/temp.dart';
+import 'package:task_management_app/ui/note_page.dart';
 import 'package:task_management_app/utils/export.dart';
 import 'package:task_management_app/ui/widgets/floating_action_button.dart';
 
@@ -22,7 +23,9 @@ class _HomePageState extends State<HomePage> {
       padding16, right: 
       // MediaQuery.of(context).viewInsets.right + 
       padding8),child:  CustomFloatingActionButton(onTap: () {
-        ///
+        Navigator.push(context, MaterialPageRoute(builder: (context) {
+          return const NotePage();
+        },));
       },)),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       body:   Padding(
