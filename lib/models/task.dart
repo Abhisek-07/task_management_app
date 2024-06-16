@@ -7,10 +7,10 @@ part 'task.g.dart';
 @JsonSerializable()
 class Task {
   Task({
-    // required this.id ,
+    required this.id ,
     this.title, this.description, this.createdAt, this.isCompleted = false, this.deadLine, this.priority});
 
-  // int id;
+  int id;
   String? title;
   String? description;
   DateTime? createdAt;

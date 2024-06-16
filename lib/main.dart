@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:task_management_app/state/task_bloc/task_cubit.dart';
+import 'package:task_management_app/state/tasks_app_bloc_observer.dart';
 import 'package:task_management_app/utils/export.dart';
 
 void main() {
+  Bloc.observer =  TasksAppBlocObserver();
   runApp(const MyApp());
 }
 
@@ -23,7 +27,8 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.yellow, ),
         useMaterial3: true,
       ),
-      home: const HomePage(),
+      home: BlocProvider(create: (BuildContext context) => TasksCubit(),
+      child: const HomePage()),
     );
   }
 }

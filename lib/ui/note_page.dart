@@ -21,6 +21,7 @@ class NotePageState extends State<NotePage> {
 
     if (title.isNotEmpty || content.isNotEmpty) {
       final newNote = Task(
+        id: DateTime.now().microsecondsSinceEpoch,
         title: title,
         description: content,
       );
