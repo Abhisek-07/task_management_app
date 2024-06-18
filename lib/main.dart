@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_management_app/state/task_bloc/task_cubit.dart';
 import 'package:task_management_app/state/tasks_app_bloc_observer.dart';
+import 'package:task_management_app/ui_defaults/ui_default_styles.dart';
 import 'package:task_management_app/utils/export.dart';
 
 void main() {
@@ -23,7 +24,9 @@ class MyApp extends StatelessWidget {
   bodyColor: Colors.black,
   displayColor: Colors.black,
 ),
-        appBarTheme: const AppBarTheme(backgroundColor: Colors.yellow),
+        appBarTheme:  AppBarTheme(backgroundColor: Colors.yellow, titleTextStyle: appBarTextStyle, 
+        // foregroundColor: Colors.black
+        ),
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.yellow, ),
         useMaterial3: true,
       ),

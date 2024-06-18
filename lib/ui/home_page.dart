@@ -4,7 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_management_app/state/task_bloc/task_cubit.dart';
 import 'package:task_management_app/state/task_bloc/task_state.dart';
-import 'package:task_management_app/ui/note_page.dart';
+import 'package:task_management_app/ui/task_page.dart';
 import 'package:task_management_app/utils/export.dart';
 import 'package:task_management_app/ui/widgets/floating_action_button.dart';
 
@@ -19,14 +19,14 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return   Scaffold(
-      appBar: AppBar(title: const Text("Tasks"),),
+      appBar: AppBar(title: const Text("Tasks",),),
       floatingActionButton: Container(margin: const EdgeInsets.only(bottom: 
       // MediaQuery.of(context).viewInsets.bottom + 
       padding16, right: 
       // MediaQuery.of(context).viewInsets.right + 
       padding8),child:  CustomFloatingActionButton(onTap: () {
         Navigator.push(context, MaterialPageRoute(builder: (context) {
-          return const NotePage();
+          return const TaskPage();
         },));
       },)),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
@@ -42,8 +42,10 @@ class _HomePageState extends State<HomePage> {
               
               builder: (context, state) {
                 if(state.tasks.isEmpty) {
-                  return const Center(
-                    child: Text("No tasks added yet...", style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),),
+                  return const Expanded(
+                    child: Center(
+                      child: Text("Wow, such empty...", style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),),
+                    ),
                   );
                 } else {
                 return Flexible(

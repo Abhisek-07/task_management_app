@@ -1,32 +1,42 @@
 import 'dart:developer';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_management_app/models/task.dart';
+import 'package:task_management_app/state/task_bloc/task_cubit.dart';
+
 import 'package:task_management_app/utils/constants.dart';
 
-class NotePage extends StatefulWidget {
-  const NotePage({super.key});
+class TaskPage extends StatefulWidget {
+  const TaskPage({super.key});
 
   @override
-  NotePageState createState() => NotePageState();
+  TaskPageState createState() => TaskPageState();
 }
 
-class NotePageState extends State<NotePage> {
+class TaskPageState extends State<TaskPage> {
   final _titleController = TextEditingController();
   final _contentController = TextEditingController();
+
+  late final TasksCubit taskCubit;
+  bool isSaveEnabled = false;
 
   void _saveNote() {
     final title = _titleController.text;
     final content = _contentController.text;
 
-    if (title.isNotEmpty || content.isNotEmpty) {
-      final newNote = Task(
+    if (isSaveEnabled) {
+      final newTask = Task(
         id: DateTime.now().microsecondsSinceEpoch,
         title: title,
         description: content,
       );
-
-      Navigator.pop(context, newNote);
+      taskCubit.addTask(newTask);
+      Navigator.pop(context, 
+      // newTask : Passes the result in pop method return
+      )
+      ;
     } else {
       Navigator.pop(context);
     }
@@ -34,25 +44,47 @@ class NotePageState extends State<NotePage> {
 
   @override
   void dispose() {
+    _titleController.removeListener(handleIsSaveEnabled);
+    _contentController.removeListener(handleIsSaveEnabled);
     _titleController.dispose();
     _contentController.dispose();
     super.dispose();
   }
 
   @override
+  void initState() {
+    super.initState();
+    taskCubit = BlocProvider.of<TasksCubit>(context);
+    _titleController.addListener(handleIsSaveEnabled);
+    _contentController.addListener(handleIsSaveEnabled);
+  }
+
+  void handleIsSaveEnabled() {
+      setState(() {
+        isSaveEnabled = _titleController.text.isNotEmpty || _contentController.text.isNotEmpty;
+      });
+  }
+
+  @override
   Widget build(BuildContext context) {
+
+
     return PopScope(
       onPopInvoked: (didPop) {
         log("pop invoked");
+        _saveNote();
       },
       child: Scaffold(
         appBar: AppBar(
           // leading: ,
           title: const Text('New Note'),
           actions: [
-            IconButton(
-              icon: const Icon(Icons.save),
-              onPressed: _saveNote,
+            Visibility(
+              visible: isSaveEnabled,
+              child: IconButton(
+                icon: const Icon(Icons.check),
+                onPressed: _saveNote,
+              ),
             ),
           ],
         ),
