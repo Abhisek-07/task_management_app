@@ -19,10 +19,38 @@ class TaskPageState extends State<TaskPage> {
   final _titleController = TextEditingController();
   final _contentController = TextEditingController();
 
-  late final TasksCubit taskCubit;
   bool isSaveEnabled = false;
 
-  void _saveNote() {
+  
+
+  @override
+  void dispose() {
+    _titleController.removeListener(handleIsSaveEnabled);
+    _contentController.removeListener(handleIsSaveEnabled);
+    _titleController.dispose();
+    _contentController.dispose();
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _titleController.addListener(handleIsSaveEnabled);
+    _contentController.addListener(handleIsSaveEnabled);
+  }
+
+  void handleIsSaveEnabled() {
+      setState(() {
+        isSaveEnabled = _titleController.text.isNotEmpty || _contentController.text.isNotEmpty;
+      });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+
+  final TasksCubit taskCubit = BlocProvider.of<TasksCubit>(context);
+
+void _saveNote() {
     final title = _titleController.text;
     final content = _contentController.text;
 
@@ -41,32 +69,6 @@ class TaskPageState extends State<TaskPage> {
       Navigator.pop(context);
     }
   }
-
-  @override
-  void dispose() {
-    _titleController.removeListener(handleIsSaveEnabled);
-    _contentController.removeListener(handleIsSaveEnabled);
-    _titleController.dispose();
-    _contentController.dispose();
-    super.dispose();
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    taskCubit = BlocProvider.of<TasksCubit>(context);
-    _titleController.addListener(handleIsSaveEnabled);
-    _contentController.addListener(handleIsSaveEnabled);
-  }
-
-  void handleIsSaveEnabled() {
-      setState(() {
-        isSaveEnabled = _titleController.text.isNotEmpty || _contentController.text.isNotEmpty;
-      });
-  }
-
-  @override
-  Widget build(BuildContext context) {
 
 
     return PopScope(

@@ -25,8 +25,8 @@ class _HomePageState extends State<HomePage> {
       padding16, right: 
       // MediaQuery.of(context).viewInsets.right + 
       padding8),child:  CustomFloatingActionButton(onTap: () {
-        Navigator.push(context, MaterialPageRoute(builder: (context) {
-          return const TaskPage();
+        Navigator.push(context, MaterialPageRoute(builder: (context2) {
+          return BlocProvider.value(value: BlocProvider.of<TasksCubit>(context), child:  const TaskPage());
         },));
       },)),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,

@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.yellow, ),
         useMaterial3: true,
       ),
-      home: BlocProvider(create: (BuildContext context) => TasksCubit(),
+      home: BlocProvider<TasksCubit>(create: (BuildContext context) => TasksCubit(),
       child: const HomePage()),
     );
   }
