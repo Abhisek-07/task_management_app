@@ -25,7 +25,7 @@ class _HomePageState extends State<HomePage> {
       padding16, right: 
       // MediaQuery.of(context).viewInsets.right + 
       padding8),child:  CustomFloatingActionButton(onTap: () {
-        Navigator.push(context, MaterialPageRoute(builder: (context2) {
+        Navigator.push(context, MaterialPageRoute(builder: (taskPageContext) {
           return BlocProvider.value(value: BlocProvider.of<TasksCubit>(context), child:  const TaskPage());
         },));
       },)),
@@ -36,7 +36,6 @@ class _HomePageState extends State<HomePage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            const SizedBox(height: defaultPadding,),
             /// Task list
             BlocBuilder<TasksCubit, TasksState>(
               
@@ -49,7 +48,9 @@ class _HomePageState extends State<HomePage> {
                   );
                 } else {
                 return Flexible(
-                child: ListView.builder(itemCount: state.tasks.length, itemBuilder: (context, index) {
+                child: ListView.builder(
+                  padding: const EdgeInsets.symmetric(vertical: defaultPadding),
+                  itemCount: state.tasks.length, itemBuilder: (context, index) {
                  return  TaskCard(task: state.tasks[index],);
                 },),
               ); 

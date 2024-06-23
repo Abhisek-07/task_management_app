@@ -61,12 +61,12 @@ void _saveNote() {
         description: content,
       );
       taskCubit.addTask(newTask);
-      Navigator.pop(context, 
+      // Navigator.pop(context, 
       // newTask : Passes the result in pop method return
-      )
-      ;
+      // )
+      
     } else {
-      Navigator.pop(context);
+      // Navigator.pop(context);
     }
   }
 
@@ -85,7 +85,9 @@ void _saveNote() {
               visible: isSaveEnabled,
               child: IconButton(
                 icon: const Icon(Icons.check),
-                onPressed: _saveNote,
+                onPressed: () {
+                  Navigator.pop(context);
+                }, 
               ),
             ),
           ],

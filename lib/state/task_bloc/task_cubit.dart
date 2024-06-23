@@ -6,7 +6,7 @@ class TasksCubit extends Cubit<TasksState> {
   TasksCubit() : super(const TasksState());
 
   void addTask(Task task) {
-    final newTasks = List<Task>.from(state.tasks)..add(task);
+    final newTasks = List<Task>.from(state.tasks)..insert(0, task);
     emit(TasksState(tasks: newTasks));
   }
 
