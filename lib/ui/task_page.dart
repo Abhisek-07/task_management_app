@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_management_app/models/task.dart';
 import 'package:task_management_app/state/task_bloc/task_cubit.dart';
+import 'package:task_management_app/state/task_bloc/task_state.dart';
 
 import 'package:task_management_app/utils/constants.dart';
 
@@ -18,10 +19,9 @@ class TaskPage extends StatefulWidget {
 class TaskPageState extends State<TaskPage> {
   final _titleController = TextEditingController();
   final _contentController = TextEditingController();
+  late final TasksCubit taskCubit;
 
   bool isSaveEnabled = false;
-
-  
 
   @override
   void dispose() {
@@ -37,40 +37,55 @@ class TaskPageState extends State<TaskPage> {
     super.initState();
     _titleController.addListener(handleIsSaveEnabled);
     _contentController.addListener(handleIsSaveEnabled);
+    taskCubit = BlocProvider.of<TasksCubit>(context);
+    prefillSelecteTaskData();
   }
 
-  void handleIsSaveEnabled() {
-      setState(() {
-        isSaveEnabled = _titleController.text.isNotEmpty || _contentController.text.isNotEmpty;
-      });
+  void prefillSelecteTaskData() {
+    final selectedTask = taskCubit.state.selectedTask;
+    if (selectedTask != null) {
+      _titleController.text = selectedTask.title ?? "";
+      _contentController.text = selectedTask.description ?? "";
+    } else {
+      _titleController.clear();
+      _contentController.clear();
+    }
   }
 
-  @override
-  Widget build(BuildContext context) {
-
-  final TasksCubit taskCubit = BlocProvider.of<TasksCubit>(context);
-
-void _saveNote() {
+  void _saveNote() {
     final title = _titleController.text;
     final content = _contentController.text;
 
     if (isSaveEnabled) {
-      final newTask = Task(
-        id: DateTime.now().microsecondsSinceEpoch,
-        title: title,
-        description: content,
-      );
-      taskCubit.addTask(newTask);
-      // Navigator.pop(context, 
-      // newTask : Passes the result in pop method return
-      // )
-      
+      if (taskCubit.state.selectedTask != null) {
+        taskCubit.updateTask(taskCubit.state.selectedTask!.copyWith(
+          title: title,
+          description: content,
+        ));
+      } else {
+        final newTask = Task(
+          id: DateTime.now().microsecondsSinceEpoch,
+          title: title,
+          description: content,
+        );
+        taskCubit.addTask(newTask);
+      }
     } else {
-      // Navigator.pop(context);
+      if (taskCubit.state.selectedTask != null) {
+        taskCubit.deleteTaskById(taskCubit.state.selectedTask!.id);
+      }
     }
   }
 
+  void handleIsSaveEnabled() {
+    setState(() {
+      isSaveEnabled = _titleController.text.isNotEmpty ||
+          _contentController.text.isNotEmpty;
+    });
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return PopScope(
       onPopInvoked: (didPop) {
         log("pop invoked");
@@ -87,7 +102,7 @@ void _saveNote() {
                 icon: const Icon(Icons.check),
                 onPressed: () {
                   Navigator.pop(context);
-                }, 
+                },
               ),
             ),
           ],

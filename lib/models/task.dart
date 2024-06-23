@@ -8,7 +8,7 @@ part 'task.g.dart';
 class Task {
   Task({
     required this.id ,
-    this.title, this.description, this.createdAt, this.isCompleted = false, this.deadLine, this.priority});
+    this.title, this.description, this.createdAt, this.isCompleted = false, this.deadLine, this.priority, this.editedAt});
 
   int id;
   String? title;
@@ -23,6 +23,29 @@ class Task {
 
  
   Map<String, dynamic> toJson() => _$TaskToJson(this);
+
+    Task copyWith({
+    int? id,
+    String? title,
+    String? description,
+    DateTime? createdAt,
+    DateTime? editedAt,
+    DateTime? deadLine,
+    Priority? priority,
+    bool? isCompleted,
+  }) {
+    return Task(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      description: description ?? this.description,
+      createdAt: createdAt ?? this.createdAt,
+      editedAt: editedAt ?? this.editedAt,
+      deadLine: deadLine ?? this.deadLine,
+      priority: priority ?? this.priority,
+      isCompleted: isCompleted ?? this.isCompleted,
+    );
+  }
+
 }
 
 enum Priority {

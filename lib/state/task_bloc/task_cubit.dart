@@ -21,4 +21,12 @@ class TasksCubit extends Cubit<TasksState> {
     final newTasks = state.tasks.where((task) => task.id != id).toList();
     emit(TasksState(tasks: newTasks));
   }
+
+    void selectTask(Task task) {
+    emit(state.copyWith(selectedTask: task));
+  }
+
+  void clearSelectedTask() {
+    emit(state.copyWith(selectedTask: null));
+  }
 }

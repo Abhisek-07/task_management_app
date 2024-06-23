@@ -18,19 +18,33 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
-    return   Scaffold(
-      appBar: AppBar(title: const Text("Tasks",),),
-      floatingActionButton: Container(margin: const EdgeInsets.only(bottom: 
-      // MediaQuery.of(context).viewInsets.bottom + 
-      padding16, right: 
-      // MediaQuery.of(context).viewInsets.right + 
-      padding8),child:  CustomFloatingActionButton(onTap: () {
-        Navigator.push(context, MaterialPageRoute(builder: (taskPageContext) {
-          return BlocProvider.value(value: BlocProvider.of<TasksCubit>(context), child:  const TaskPage());
-        },));
-      },)),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          "Tasks",
+        ),
+      ),
+      floatingActionButton: Container(
+          margin: const EdgeInsets.only(
+              bottom:
+                  // MediaQuery.of(context).viewInsets.bottom +
+                  padding16,
+              right:
+                  // MediaQuery.of(context).viewInsets.right +
+                  padding8),
+          child: CustomFloatingActionButton(
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(
+                builder: (taskPageContext) {
+                  return BlocProvider.value(
+                      value: BlocProvider.of<TasksCubit>(context),
+                      child: const TaskPage());
+                },
+              ));
+            },
+          )),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-      body:   Padding(
+      body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -38,24 +52,44 @@ class _HomePageState extends State<HomePage> {
           children: [
             /// Task list
             BlocBuilder<TasksCubit, TasksState>(
-              
-              builder: (context, state) {
-                if(state.tasks.isEmpty) {
+              builder: (context, taskState) {
+                if (taskState.tasks.isEmpty) {
                   return const Expanded(
                     child: Center(
-                      child: Text("Wow, such empty...", style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),),
+                      child: Text(
+                        "Wow, such empty...",
+                        style: TextStyle(
+                            fontSize: 24, fontWeight: FontWeight.w500),
+                      ),
                     ),
                   );
                 } else {
-                return Flexible(
-                child: ListView.builder(
-                  padding: const EdgeInsets.symmetric(vertical: defaultPadding),
-                  itemCount: state.tasks.length, itemBuilder: (context, index) {
-                 return  TaskCard(task: state.tasks[index],);
-                },),
-              ); 
-              }
-              }, 
+                  return Flexible(
+                    child: ListView.builder(
+                      padding:
+                          const EdgeInsets.symmetric(vertical: defaultPadding),
+                      itemCount: taskState.tasks.length,
+                      itemBuilder: (context, index) {
+                        return TaskCard(
+                          onTap: () {
+                            context
+                                .read<TasksCubit>()
+                                .selectTask(taskState.tasks[index]);
+                            Navigator.push(context, MaterialPageRoute(
+                              builder: (taskPageContext) {
+                                return BlocProvider.value(
+                                    value: BlocProvider.of<TasksCubit>(context),
+                                    child: const TaskPage());
+                              },
+                            ));
+                          },
+                          task: taskState.tasks[index],
+                        );
+                      },
+                    ),
+                  );
+                }
+              },
             )
           ],
         ),
