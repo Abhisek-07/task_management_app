@@ -4,18 +4,16 @@ import 'package:flutter/widgets.dart';
 import 'package:task_management_app/utils/date_time_ext.dart';
 import 'package:task_management_app/utils/export.dart';
 
-
-
-
-
 class TaskCard extends StatelessWidget {
   final Task task;
   final VoidCallback? onTap;
+  final VoidCallback? onLongPress;
 
   const TaskCard({
-    super. key,
+    super.key,
     required this.task,
     this.onTap,
+    this.onLongPress,
   });
 
   @override
@@ -27,6 +25,7 @@ class TaskCard extends StatelessWidget {
     // final hours = remaining?.inHours ?? 0 % 24;
 
     return InkWell(
+      onLongPress: onLongPress,
       onTap: onTap,
       child: Card(
         elevation: 4,
@@ -34,6 +33,7 @@ class TaskCard extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(12),
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
@@ -43,39 +43,55 @@ class TaskCard extends StatelessWidget {
                     child: Text(
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
-                      (task.title?.isEmpty ?? true) ? "No title" : task.title ?? "",
-                      style:  TextStyle(
+                      (task.title?.isEmpty ?? true)
+                          ? "No title"
+                          : task.title ?? "",
+                      style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
-                        color: (task.title?.isEmpty ?? true) ? Colors.grey : Colors.black,
+                        color: (task.title?.isEmpty ?? true)
+                            ? Colors.grey
+                            : Colors.black,
                       ),
                     ),
                   ),
-                  Text(
-                    task.isCompleted ? 'Completed' : 'Pending',
-                    style: TextStyle(
-                      color: task.isCompleted ? Colors.green : Colors.red,
-                      fontWeight: FontWeight.bold,
+                  Flexible(
+                    child: Text(
+                      task.isCompleted ? 'Completed' : 'Pending',
+                      style: TextStyle(
+                        color: task.isCompleted ? Colors.green : Colors.red,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ],
               ),
               const SizedBox(height: 8),
-              Text(
-               (task.description?.isEmpty ?? true) ? "No description": task.description ?? "",
-                maxLines: 3,
-                overflow: TextOverflow.ellipsis,
-                style:  TextStyle(fontSize: 16, color: (task.description?.isEmpty ?? true) ? Colors.grey : Colors.black),
+              Flexible(
+                child: Text(
+                  (task.description?.isEmpty ?? true)
+                      ? "No description"
+                      : task.description ?? "",
+                  maxLines: 3,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                      fontSize: 16,
+                      color: (task.description?.isEmpty ?? true)
+                          ? Colors.grey
+                          : Colors.black),
+                ),
               ),
               const SizedBox(height: 8),
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Visibility(
                     visible: task.createdAt != null,
                     child: Flexible(
                       child: Text(
                         'Created: ${task.createdAt.getDateTime()}',
-                        style: const TextStyle(fontSize: 14, color: Colors.grey),
+                        style:
+                            const TextStyle(fontSize: 14, color: Colors.grey),
                       ),
                     ),
                   ),
@@ -85,7 +101,8 @@ class TaskCard extends StatelessWidget {
                     child: Flexible(
                       child: Text(
                         'Deadline: ${task.deadLine?.day} days ${task.deadLine?.hour} hours',
-                        style: const TextStyle(fontSize: 14, color: Colors.grey),
+                        style:
+                            const TextStyle(fontSize: 14, color: Colors.grey),
                       ),
                     ),
                   ),
@@ -95,7 +112,8 @@ class TaskCard extends StatelessWidget {
                     child: Flexible(
                       child: Text(
                         'Priority: ${task.priority.priorityToString()}',
-                        style: const TextStyle(fontSize: 14, color: Colors.grey),
+                        style:
+                            const TextStyle(fontSize: 14, color: Colors.grey),
                       ),
                     ),
                   ),
@@ -107,8 +125,6 @@ class TaskCard extends StatelessWidget {
       ),
     );
   }
-
-  
 }
 
 extension PriorityExt on Priority? {
