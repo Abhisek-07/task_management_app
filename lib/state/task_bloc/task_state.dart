@@ -24,7 +24,7 @@ class TasksState extends Equatable {
   }) {
     return TasksState(
       tasks: tasks ?? this.tasks,
-      selectedTask: selectedTask ?? this.selectedTask,
+      selectedTask: selectedTask,
       isChecked: isChecked ?? this.isChecked,
       isLongPressMode: isLongPressMode ?? this.isLongPressMode,
       isLoadingTasks: isLoadingTasks ?? this.isLoadingTasks,

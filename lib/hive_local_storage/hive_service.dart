@@ -13,16 +13,24 @@ class HiveService {
   Box<Task> get taskBox => Hive.box<Task>('tasksBox');
 
   Future<void> addTask(Task task) async {
-    await taskBox.put(task.id, task);
+    // Get the current list of tasks, add the new task at the start, and save back
+    final tasks = taskBox.values.toList();
+    tasks.insert(0, task);
+    await taskBox.clear(); // Clear the box before adding all tasks again
+    await taskBox
+        .addAll(tasks); // Add all tasks back with the new task at the start
   }
 
   Future<void> updateTask(Task task) async {
     // await task.save(); // TO-DO: Investigate why [task.save()] does not work
-    taskBox.put(task.id, task);
+    taskBox.putAt(
+        taskBox.values.toList().indexWhere((element) => element.id == task.id),
+        task);
   }
 
   Future<void> deleteTask(String id) async {
-    await taskBox.delete(id);
+    await taskBox.deleteAt(
+        taskBox.values.toList().indexWhere((element) => element.id == id));
   }
 
   List<Task> getTasks() {

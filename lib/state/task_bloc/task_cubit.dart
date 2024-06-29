@@ -42,7 +42,9 @@ class TasksCubit extends Cubit<TasksState> {
   }
 
   void longPress() {
-    emit(state.copyWith(isLongPressMode: true));
+    emit(state.copyWith(
+      isLongPressMode: true,
+    ));
   }
 
   void checkboxChanged(int index, bool value) {
