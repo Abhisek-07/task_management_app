@@ -1,3 +1,3 @@
 class HiveConstants {
-  static const taskTypeId = 1;
+  static const taskTypeId = 0;
 }

@@ -17,13 +17,13 @@ class Task extends HiveObject {
       this.priority,
       this.editedAt});
 
-  @HiveField(1)
-  int id;
+  @HiveField(0)
+  String id;
 
-  @HiveField(2)
+  @HiveField(1)
   String? title;
 
-  @HiveField(3)
+  @HiveField(2)
   String? description;
 
   DateTime? createdAt;
@@ -34,7 +34,7 @@ class Task extends HiveObject {
 
   Priority? priority;
 
-  @HiveField(4)
+  @HiveField(3)
   bool isCompleted;
 
   factory Task.fromJson(Map<String, dynamic> json) => _$TaskFromJson(json);
@@ -42,7 +42,7 @@ class Task extends HiveObject {
   Map<String, dynamic> toJson() => _$TaskToJson(this);
 
   Task copyWith({
-    int? id,
+    String? id,
     String? title,
     String? description,
     DateTime? createdAt,

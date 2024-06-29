@@ -7,6 +7,7 @@ import 'package:task_management_app/models/task.dart';
 import 'package:task_management_app/state/task_bloc/task_cubit.dart';
 
 import 'package:task_management_app/utils/constants.dart';
+import 'package:uuid/uuid.dart';
 
 class TaskPage extends StatefulWidget {
   const TaskPage({super.key});
@@ -26,8 +27,12 @@ class TaskPageState extends State<TaskPage> {
   void dispose() {
     _titleController.removeListener(handleIsSaveEnabled);
     _contentController.removeListener(handleIsSaveEnabled);
-    _titleController.dispose();
-    _contentController.dispose();
+    _titleController
+      ..clear()
+      ..dispose();
+    _contentController
+      ..clear()
+      ..dispose();
     super.dispose();
   }
 
@@ -63,7 +68,7 @@ class TaskPageState extends State<TaskPage> {
         ));
       } else {
         final newTask = Task(
-          id: DateTime.now().microsecondsSinceEpoch,
+          id: const Uuid().v4(),
           title: title,
           description: content,
         );
@@ -89,6 +94,7 @@ class TaskPageState extends State<TaskPage> {
       onPopInvoked: (didPop) {
         log("pop invoked");
         _saveNote();
+        // taskCubit.clearSelectedTask();
       },
       child: Scaffold(
         appBar: AppBar(

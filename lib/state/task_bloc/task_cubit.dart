@@ -1,25 +1,36 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:task_management_app/hive_local_storage/hive_service.dart';
 import 'package:task_management_app/models/task.dart';
 import 'package:task_management_app/state/task_bloc/task_state.dart';
 
 class TasksCubit extends Cubit<TasksState> {
-  TasksCubit() : super(const TasksState(tasks: []));
+  final HiveService _hiveService = HiveService();
 
-  void addTask(Task task) {
-    final newTasks = List<Task>.from(state.tasks)..insert(0, task);
-    emit(TasksState(tasks: newTasks));
+  TasksCubit() : super(const TasksState(tasks: [], isLoadingTasks: true)) {
+    loadTasks();
   }
 
-  void updateTask(Task updatedTask) {
-    final newTasks = state.tasks.map((task) {
-      return task.id == updatedTask.id ? updatedTask : task;
-    }).toList();
-    emit(TasksState(tasks: newTasks));
+  void loadTasks({TasksState? tasksState}) {
+    final tasks = _hiveService.getTasks();
+    emit((tasksState ?? state).copyWith(
+      tasks: tasks,
+      isLoadingTasks: false,
+    ));
   }
 
-  void deleteTaskById(int id) {
-    final newTasks = state.tasks.where((task) => task.id != id).toList();
-    emit(TasksState(tasks: newTasks));
+  void addTask(Task task) async {
+    await _hiveService.addTask(task);
+    loadTasks();
+  }
+
+  void updateTask(Task updatedTask) async {
+    await _hiveService.updateTask(updatedTask);
+    loadTasks();
+  }
+
+  void deleteTaskById(String id) async {
+    await _hiveService.deleteTask(id);
+    loadTasks();
   }
 
   void selectTask(Task task) {
@@ -51,28 +62,20 @@ class TasksCubit extends Cubit<TasksState> {
     ));
   }
 
-  void deleteSelectedTasks() {
-    final newTasks = state.tasks
-        .asMap()
-        .entries
-        .where(
-          (element) => !(state.isChecked ?? []).contains(element.key),
-        )
-        .map((e) => e.value)
-        .toList();
-    emit(TasksState(
-        tasks: newTasks, isChecked: const [], isLongPressMode: false));
+  void deleteSelectedTasks() async {
+    for (int index in state.isChecked ?? []) {
+      await _hiveService.deleteTask(state.tasks[index].id);
+    }
+    loadTasks(
+        tasksState: state.copyWith(isChecked: [], isLongPressMode: false));
   }
 
-  void markSelectedTasksAsCompleted() {
-    final newTasks = state.tasks.asMap().entries.map((entry) {
-      if ((state.isChecked ?? []).contains(entry.key)) {
-        return entry.value.copyWith(isCompleted: true);
-      } else {
-        return entry.value;
-      }
-    }).toList();
-    emit(TasksState(
-        tasks: newTasks, isChecked: const [], isLongPressMode: false));
+  void markSelectedTasksAsCompleted() async {
+    for (int index in state.isChecked ?? []) {
+      final updatedTask = state.tasks[index].copyWith(isCompleted: true);
+      await _hiveService.updateTask(updatedTask);
+    }
+    loadTasks(
+        tasksState: state.copyWith(isChecked: [], isLongPressMode: false));
   }
 }

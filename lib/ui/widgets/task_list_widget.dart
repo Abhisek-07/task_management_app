@@ -20,6 +20,13 @@ class TasksListWidget extends StatelessWidget {
           /// Task list
           BlocBuilder<TasksCubit, TasksState>(
             builder: (context, taskState) {
+              if (taskState.isLoadingTasks) {
+                return const Expanded(
+                  child: Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                );
+              }
               if (taskState.tasks.isEmpty) {
                 return const Expanded(
                   child: Center(

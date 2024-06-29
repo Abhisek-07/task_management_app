@@ -78,6 +78,7 @@ class _HomePageState extends State<HomePage> {
             child: CustomFloatingActionButton(
               onTap: () {
                 context.read<TasksCubit>().cancelLongPressMode();
+                context.read<TasksCubit>().clearSelectedTask();
                 Navigator.push(context, MaterialPageRoute(
                   builder: (taskPageContext) {
                     return BlocProvider.value(

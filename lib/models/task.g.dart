@@ -8,7 +8,7 @@ part of 'task.dart';
 
 class TaskAdapter extends TypeAdapter<Task> {
   @override
-  final int typeId = 1;
+  final int typeId = 0;
 
   @override
   Task read(BinaryReader reader) {
@@ -17,10 +17,10 @@ class TaskAdapter extends TypeAdapter<Task> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return Task(
-      id: fields[1] as int,
-      title: fields[2] as String?,
-      description: fields[3] as String?,
-      isCompleted: fields[4] as bool,
+      id: fields[0] as String,
+      title: fields[1] as String?,
+      description: fields[2] as String?,
+      isCompleted: fields[3] as bool,
     );
   }
 
@@ -28,13 +28,13 @@ class TaskAdapter extends TypeAdapter<Task> {
   void write(BinaryWriter writer, Task obj) {
     writer
       ..writeByte(4)
-      ..writeByte(1)
+      ..writeByte(0)
       ..write(obj.id)
-      ..writeByte(2)
+      ..writeByte(1)
       ..write(obj.title)
-      ..writeByte(3)
+      ..writeByte(2)
       ..write(obj.description)
-      ..writeByte(4)
+      ..writeByte(3)
       ..write(obj.isCompleted);
   }
 
@@ -54,7 +54,7 @@ class TaskAdapter extends TypeAdapter<Task> {
 // **************************************************************************
 
 Task _$TaskFromJson(Map<String, dynamic> json) => Task(
-      id: (json['id'] as num).toInt(),
+      id: json['id'] as String,
       title: json['title'] as String?,
       description: json['description'] as String?,
       createdAt: json['createdAt'] == null
